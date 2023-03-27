@@ -24,7 +24,7 @@ final class InMemoryFleetRepository implements FleetRepositoryInterface
         return $this->fleets[$fleetId->isValid()] ?? null;
     }
 
-    public function findByOwnerId(int $ownerId): ?Fleet
+    public function findByOwnerId(int $ownerId): ?array
     {
         return array_filter($this->fleets, fn (Fleet $fleet) => $fleet->getOwnerId() === $ownerId);
     }

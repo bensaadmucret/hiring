@@ -13,7 +13,7 @@ interface FleetRepositoryInterface
 
     public function findById(FleetId $fleetId): ?Fleet;
 
-    public function findByOwnerId(int $ownerId): ?Fleet;
+    public function findByOwnerId(int $ownerId): ?array;
 
     public function getVehicleById(int $vehicleId): ?Vehicle;
 
