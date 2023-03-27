@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Domain\Fleet\Repository;
+namespace Fulll\Domain\Fleet;
 
 
 use Fulll\Domain\Fleet\ValueObject\FleetId;
-use Fulll\Domain\Fleet\Fleet;
+use Fulll\Domain\Vehicle\Vehicle;
+
 
 interface FleetRepositoryInterface
 {
@@ -12,5 +13,8 @@ interface FleetRepositoryInterface
 
     public function findById(FleetId $fleetId): ?Fleet;
 
-    public function findByOwnerId(int $ownerId): array;
+    public function findByOwnerId(int $ownerId): ?Fleet;
+
+    public function getVehicleById(int $vehicleId): ?Vehicle;
+
 }

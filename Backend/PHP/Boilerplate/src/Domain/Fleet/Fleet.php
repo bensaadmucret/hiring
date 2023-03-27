@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace Fulll\Domain\Fleet;
 
 use Fulll\Domain\Fleet\ValueObject\FleetId;
-use Fulll\Domain\Vehicle\ValueObject\VehicleId;
 use Fulll\Domain\Vehicle\Vehicle;
+use Fulll\Helpers\UniqueId;
 
-class Fleet
+final class Fleet
 {
     private FleetId $id;
-    private string $name;
     private array $vehicles;
+    private int $ownerId;
 
-    public function __construct(FleetId $id, string $name, array $vehicles = [])
+    public function __construct(FleetId $id, array $vehicles = [])
     {
         $this->id = $id;
-        $this->name = $name;
         $this->vehicles = $vehicles;
     }
 
@@ -26,10 +25,18 @@ class Fleet
         return $this->id;
     }
 
-    public function getName(): string
+    public function validate(): void
     {
-        return $this->name;
+        if (!$this->id->isValid()) {
+            throw new \InvalidArgumentException('Invalid id format');
+        }
     }
+
+    public function isValid(): bool
+    {
+        return $this->id->isValid();
+    }
+
 
     public function getVehicles(): array
     {
@@ -45,10 +52,26 @@ class Fleet
         $this->vehicles[] = $vehicle;
     }
 
-    public function removeVehicle(VehicleId $vehicleId): void
+    public function removeVehicle(UniqueId $vehicleId): void
     {
         $this->vehicles = array_filter($this->vehicles, function (Vehicle $vehicle) use ($vehicleId) {
             return !$vehicle->getId()->equals($vehicleId);
         });
+    }
+
+
+    public function getOwnerId(): int
+    {
+        return $this->ownerId;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->id === $other->id;
+    }
+
+    public function generateOwnerId(): int
+    {
+        return $this->ownerId = rand(1, 100);
     }
 }

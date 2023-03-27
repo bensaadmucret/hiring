@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace Fulll\Domain\Vehicle\ValueObject;
 
-use Stringable;
+use Fulll\Helpers\UniqueId;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Ramsey\Uuid\Uuid;
 
-
-class VehicleId implements Stringable
+final class VehicleId
 {
-    private string $id;
+    private UniqueId $id;
 
-    public function __construct(string $id)
+    public function __construct(UniqueId $id)
     {
-        if (!preg_match('/^[a-f\d]{8}(-[a-f\d]{4}){3}-[a-f\d]{12}$/i', $id)) {
-            throw new \InvalidArgumentException(sprintf('Invalid UUID format for id "%s"', $id));
-        }
-
-        $this->id = $id;
+        $this->id = $id::generate();
+        $this->validate();
     }
 
     public function equals(self $other): bool
@@ -25,9 +23,21 @@ class VehicleId implements Stringable
         return $this->id === $other->id;
     }
 
+    public function validate(): void
+    {
+        if (!$this->id->isValid()) {
+            throw new \InvalidArgumentException('Invalid id format');
+        }
+    }
 
     public function __toString(): string
     {
-        return $this->id;
+        return (string) $this->id;
+    }
+
+    public function isValid(): bool
+    {
+        return $this->id->isValid();
+
     }
 }
