@@ -4,18 +4,35 @@ declare(strict_types=1);
 
 namespace Fulll\Domain\Vehicle\ValueObject;
 
-use Fulll\Helpers\UniqueId;
-use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Ramsey\Uuid\Uuid;
+use InvalidArgumentException;
 
 final class VehicleId
 {
-    private UniqueId $id;
+    private int $id;
 
-    public function __construct(UniqueId $id)
+    public function __construct(int $id)
     {
-        $this->id = $id::generate();
-        $this->validate();
+        if ($id < 1) {
+            throw new InvalidArgumentException('VehicleId must be a positive integer.');
+        }
+
+        $this->id = $id;
+    }
+
+    public static function generate(): int
+    {
+        // Générer un identifiant unique pour chaque véhicule en utilisant la fonction uniqid() de PHP
+        $id =  uniqid();
+        // Conversion de l'identifiant en entier
+        $id = intval($id);
+        return $id;
+
+    }
+
+
+    public function getInt(): int
+    {
+        return $this->id;
     }
 
     public function equals(self $other): bool
@@ -23,21 +40,15 @@ final class VehicleId
         return $this->id === $other->id;
     }
 
-    public function validate(): void
-    {
-        if (!$this->id->isValid()) {
-            throw new \InvalidArgumentException('Invalid id format');
-        }
-    }
-
     public function __toString(): string
     {
         return (string) $this->id;
     }
 
-    public function isValid(): bool
+    public function toSting(): string
     {
-        return $this->id->isValid();
-
+        return (string) $this->id;
     }
+
+
 }

@@ -6,7 +6,7 @@ namespace Fulll\Domain\Fleet;
 
 use Fulll\Domain\Fleet\ValueObject\FleetId;
 use Fulll\Domain\Vehicle\Vehicle;
-use Fulll\Helpers\UniqueId;
+use Fulll\Domain\Vehicle\ValueObject\VehicleId;
 
 final class Fleet
 {
@@ -14,12 +14,13 @@ final class Fleet
     private array $vehicles;
     private int $ownerId;
 
-    public function __construct(FleetId $id, array $vehicles = [])
+    public function __construct()
     {
-        $this->id = $id;
-        $this->vehicles = $vehicles;
+        $this->id = new FleetId();
+        $this->validate();
+        $this->vehicles = [];
+        $this->ownerId = $this->generateOwnerId();
     }
-
     public function getId(): FleetId
     {
         return $this->id;
@@ -37,7 +38,6 @@ final class Fleet
         return $this->id->isValid();
     }
 
-
     public function getVehicles(): array
     {
         return $this->vehicles;
@@ -52,13 +52,23 @@ final class Fleet
         $this->vehicles[] = $vehicle;
     }
 
-    public function removeVehicle(UniqueId $vehicleId): void
+    public function hasVehicle(Vehicle $vehicle): bool
+    {
+        foreach ($this->vehicles as $fleetVehicle) {
+            if ($fleetVehicle->getId() === $vehicle->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public function removeVehicle(VehicleId $vehicleId): void
     {
         $this->vehicles = array_filter($this->vehicles, function (Vehicle $vehicle) use ($vehicleId) {
             return !$vehicle->getId()->equals($vehicleId);
         });
     }
-
 
     public function getOwnerId(): int
     {

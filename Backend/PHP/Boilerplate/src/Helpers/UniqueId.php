@@ -40,4 +40,16 @@ final class UniqueId
     {
         return $this->id;
     }
+
+
+    public function getInteger(): int
+    {
+       $mut =  hexdec(str_replace('-', '', $this->id));
+       // conversion to int
+         return intval($mut);
+
+    }
+
+
+
 }

@@ -4,40 +4,66 @@ declare(strict_types=1);
 
 namespace Fulll\Domain\Vehicle;
 
+use Fulll\Domain\ParKing\Location;
 use Fulll\Domain\Vehicle\ValueObject\VehicleId;
 use Fulll\Domain\Vehicle\ValueObject\VehiclePlateNumber;
-use Fulll\Helpers\GeneratePlateNumber;
-use Fulll\Helpers\UniqueId;
+
+
 use Stringable;
 
 final class Vehicle implements Stringable
 {
-    private UniqueId $id;
-    private GeneratePlateNumber $plateNumber;
+    private VehicleId $vehicleId;
+    private int $id;
+    private VehiclePlateNumber $plateNumber;
+    private $location;
 
-    public function __construct(GeneratePlateNumber $plateNumber, UniqueId $uniqueId)
+    public function __construct()
     {
-        $this->id = $uniqueId::generate();
-        $this->plateNumber = new GeneratePlateNumber();
+
+        $this->id = VehicleId::generate();
+        $this->plateNumber = new VehiclePlateNumber();
     }
 
-    public function getId(): UniqueId
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getPlateNumber(): GeneratePlateNumber
+    public function getPlateNumber(): VehiclePlateNumber
     {
         return $this->plateNumber;
     }
 
     public function equals(self $other): bool
     {
-        return $this->id->equals($other->id);
+        return $this->id === $other->id;
     }
 
     public function __toString(): string
     {
         return (string) $this->id;
     }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function getInteger(): int
+    {
+        return $this->id;
+    }
+
+    public function toSting(): string
+    {
+        return (string) $this->id;
+    }
+
+    public function getVehicleId(): VehicleId
+    {
+        $this->vehicleId = uniqid();
+        return $this->vehicleId;
+    }
+
 }
