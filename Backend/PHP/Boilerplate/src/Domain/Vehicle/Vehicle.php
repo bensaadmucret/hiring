@@ -16,7 +16,7 @@ final class Vehicle implements Stringable
     private VehicleId $vehicleId;
     private int $id;
     private VehiclePlateNumber $plateNumber;
-    private $location;
+    private ?Location $location = null;
 
     public function __construct()
     {
@@ -45,7 +45,7 @@ final class Vehicle implements Stringable
         return (string) $this->id;
     }
 
-    public function getLocation(): Location
+    public function getLocation(): ?Location
     {
         return $this->location;
     }
