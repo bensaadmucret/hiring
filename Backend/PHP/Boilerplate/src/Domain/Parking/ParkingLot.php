@@ -3,7 +3,7 @@
 namespace Fulll\Domain\ParKing;
 
 use Fulll\Domain\Vehicle\ValueObject\VehicleId;
-use Fulll\Helpers\UniqueId;
+
 
 final class ParkingLot
 {
